@@ -1,0 +1,1642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeetCode Problem Explorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e6ef;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .subtitle {
+            color: #7f8c8d;
+            font-size: 1.2rem;
+        }
+        
+        .problem-selector {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+        }
+        
+        .dropdown-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+        
+        select {
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            background-color: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
+        }
+        
+        select:hover, select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .problem-content {
+            background-color: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        .problem-content.active {
+            display: block;
+        }
+        
+        .problem-title {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f3f8;
+            font-size: 1.8rem;
+        }
+        
+        .part {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f8fafc;
+            border-left: 4px solid #3498db;
+        }
+        
+        .part h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .part p {
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .explanation-list {
+            padding-left: 20px;
+            margin: 10px 0;
+        }
+        
+        .explanation-list li {
+            margin-bottom: 8px;
+        }
+        
+        .complexity {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+        }
+        
+        .time-complexity, .space-complexity {
+            padding: 10px 15px;
+            border-radius: 6px;
+            background-color: #e8f4fc;
+            flex: 1;
+        }
+        
+        .time-complexity h4, .space-complexity h4 {
+            color: #2980b9;
+            margin-bottom: 5px;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e6ef;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: none;
+            font-size: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .problem-selector, .problem-content {
+                padding: 15px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .complexity {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>LeetCode Problem Explorer</h1>
+            <p class="subtitle">Detailed explanations for 16 essential LeetCode problems</p>
+        </header>
+        
+        <div class="problem-selector">
+            <div class="dropdown-container">
+                <label for="problemDropdown">Select a LeetCode Problem:</label>
+                <select id="problemDropdown">
+                    <option value="">-- Choose a problem --</option>
+                    <option value="104">104 - Maximum Depth of Binary Tree</option>
+                    <option value="206">206 - Reverse Linked List</option>
+                    <option value="46">46 - Permutations</option>
+                    <option value="70">70 - Climbing Stairs</option>
+                    <option value="322">322 - Coin Change</option>
+                    <option value="198">198 - House Robber</option>
+                    <option value="704">704 - Binary Search</option>
+                    <option value="33">33 - Search in Rotated Sorted Array</option>
+                    <option value="3">3 - Longest Substring Without Repeating Characters</option>
+                    <option value="125">125 - Valid Palindrome</option>
+                    <option value="94">94 - Binary Tree Inorder Traversal</option>
+                    <option value="102">102 - Binary Tree Level Order Traversal</option>
+                    <option value="200">200 - Number of Islands</option>
+                    <option value="733">733 - Flood Fill</option>
+                    <option value="20">20 - Valid Parentheses</option>
+                    <option value="739">739 - Daily Temperatures</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- All 16 Problem Contents -->
+        
+        <!-- Problem 104 Content -->
+        <div id="content-104" class="problem-content">
+            <h2 class="problem-title">LC 104 - Maximum Depth of Binary Tree</h2>
+            
+            <div class="part">
+                <h3>PART 1: Forget Coding. Imagine a Real-Life Thing.</h3>
+                <p>Imagine a family tree or an organization chart. At the top, there is one person (CEO / Grandparent). Below them are children. Below children are grandchildren. And so on… This forms a tree shape.</p>
+                <p>Now someone asks you a very simple question: "What is the maximum depth of this tree?"</p>
+                <p>Meaning: What is the longest path from the top person to the lowest person? Not how many people total. Not how many branches. Just how deep it goes.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: What Does "Depth" Mean in Plain English?</h3>
+                <p>Depth = "How many levels do I go down before I hit the bottom?"</p>
+                <p>Example: Only one person → depth = 1. Person → child → grandchild → depth = 3.</p>
+                <p>So depth is just counting levels.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: How a Human Would Solve This (No Code)</h3>
+                <p>You stand at the top of the tree. You look: Left side branch, Right side branch. And you ask: "Which side goes deeper?" Then you take the deeper one and add 1 (because you're standing at the current level). That's it. This is how any normal human would do it.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: Breaking the Problem into Smaller Thinking</h3>
+                <p>Instead of solving the whole tree, you think like this: "If someone tells me how deep the left side is and how deep the right side is, I can easily answer for this node."</p>
+                <p>So the rule becomes: Depth of a node = 1 + maximum depth of its children. This works for small trees, big trees, any tree.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: What Is the Base Case? (Stopping Point)</h3>
+                <p>Eventually, you reach a point where: There is no person, no node, nothing there. In that case: Depth = 0. This is very important, because every process needs a stop point.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Brute Force vs Smart Thinking (Layman Version)</h3>
+                <p><strong>Brute Force Thinking:</strong> Visit every possible path, count lengths manually, compare them. This works, but it's messy and unnecessary.</p>
+                <p><strong>Smart Thinking:</strong> Ask left side for its depth, ask right side for its depth, pick the bigger one, add 1. Much cleaner. Much calmer.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 7: Now Convert This Thinking Into Code (Python)</h3>
+                <p>Don't worry — I'll explain every single line. First, how a tree node looks (don't overthink this):</p>
+                <div class="code-block">class TreeNode:
+    def __init__(self, value):
+        self.val = value      # value stored in the node
+        self.left = None      # left child
+        self.right = None     # right child</div>
+                <p>You can think of this as: A person who can have a left child and a right child.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 8: The Actual Solution Code (With Very Clear Comments)</h3>
+                <div class="code-block">def maxDepth(self, root):
+    # If there is no node, depth is 0
+    if root is None:
+        return 0
+
+    # Ask the left side: how deep are you?
+    left_depth = self.maxDepth(root.left)
+
+    # Ask the right side: how deep are you?
+    right_depth = self.maxDepth(root.right)
+
+    # Take the deeper side and add 1 for the current node
+    return 1 + max(left_depth, right_depth)</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 9: What Is REALLY Happening Here (Very Important)</h3>
+                <p>The function does not try to solve everything at once. It trusts that smaller trees will be solved correctly. It just adds its own level on top. This is the exact same mindset as: Tower of Hanoi, Family hierarchy depth, Organization reporting depth.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 10: How to Explain This in an Interview (Plain English)</h3>
+                <p>You can say: "I treat it like checking the depth of a family tree. For each node, I find how deep the left side goes and how deep the right side goes. I take the deeper one and add one for the current node. If there's no node, depth is zero." That explanation alone is enough.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 11: Time & Space (Explained Simply)</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>You visit each node once, so time grows linearly with number of nodes: O(n).</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>The function calls stack up based on height. Worst case: tree is like a straight line: O(n).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 12: Why This Problem Is VERY Important</h3>
+                <p>Because it teaches you: How to think top-down, how to trust smaller answers, how recursion actually mirrors human thinking. Once this clicks, many tree problems become easy.</p>
+            </div>
+        </div>
+        
+        <!-- Problem 206 Content -->
+        <div id="content-206" class="problem-content">
+            <h2 class="problem-title">LC 206 - Reverse Linked List</h2>
+            
+            <div class="part">
+                <h3>PART 1: Forget Code. Imagine a Real-Life Chain.</h3>
+                <p>Imagine a chain of people standing in a line. Each person knows who is standing in front of them but does not know who is behind them.</p>
+                <p>So it looks like this: A → B → C → D → None</p>
+                <p>Meaning: A points to B, B points to C, C points to D, D points to nobody. This is called a linked list.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: What Does "Reverse" Mean?</h3>
+                <p>Reverse means: A → B → C → D → None should become: D → C → B → A → None. Everyone turns around and points the other way.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Why This Is Tricky for Humans</h3>
+                <p>You might think: "Just reverse it." But here's the catch: Once you change a person's direction, you might lose access to the rest of the chain. So you must be careful and methodical.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Human Way to Think About It</h3>
+                <p>You need three hands (three references): Previous person (initially nobody), current person (where you are standing), next person (so you don't lose the rest). This is like holding the next person's hand, turning the current person around, then moving forward.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Step-by-Step Human Process</h3>
+                <p>Let's start: prev = None, curr = A</p>
+                <ul class="explanation-list">
+                    <li><strong>Step 1:</strong> Save who comes next → B. Turn A around → point to None. Move forward. Result: None ← A, B → C → D</li>
+                    <li><strong>Step 2:</strong> Save C. Turn B around → point to A. Move forward. Result: None ← A ← B, C → D</li>
+                    <li>Repeat until no one is left. At the end: prev becomes the new head.</li>
+                </ul>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Brute Force vs Smart Way</h3>
+                <p><strong>Brute Force Thinking:</strong> Copy values into an array, reverse the array, rebuild the list. Works, but uses extra memory and isn't elegant.</p>
+                <p><strong>Smart Thinking:</strong> Reverse pointers in place, one pass, no extra space.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 7: The Node Structure (Very Simple)</h3>
+                <div class="code-block">class ListNode:
+    def __init__(self, value):
+        self.val = value      # value of the node
+        self.next = None     # pointer to next node</div>
+                <p>Think: A person pointing to the next person.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 8: The Actual Code (With Very Clear Comments)</h3>
+                <div class="code-block">class Solution:
+    def reverseList(self, head):
+        # Previous node starts as None
+        prev = None
+
+        # Current node starts at the head of the list
+        curr = head
+
+        # Walk through the entire list
+        while curr is not None:
+            # Save the next node before breaking the link
+            next_node = curr.next
+
+            # Reverse the link
+            curr.next = prev
+
+            # Move prev and curr one step forward
+            prev = curr
+            curr = next_node
+
+        # prev will be the new head of the reversed list
+        return prev</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 9: What Is REALLY Happening</h3>
+                <p>You never lose the list. You reverse links one by one. You move forward safely. This is controlled pointer reversal, not magic.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 10: How to Explain This in an Interview</h3>
+                <p>You can say: "I use three pointers: previous, current, and next. At each step, I save the next node, reverse the link, and then move forward. At the end, previous becomes the new head." That explanation is perfect.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 11: Time & Space (Simple Explanation)</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>Visit each node once → linear time: O(n).</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>No extra memory → constant space: O(1).</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 12: Why This Problem Is VERY Important</h3>
+                <p>Because it teaches: Pointer discipline, careful state updates, one-pass in-place logic. Many problems depend on this skill.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 13: Problems That Use the SAME Thinking</h3>
+                <p>Reverse nodes in k-group, Palindrome linked list, Reorder list, Remove nth node from end.</p>
+            </div>
+        </div>
+        
+        <!-- Problem 46 Content -->
+        <div id="content-46" class="problem-content">
+            <h2 class="problem-title">LC 46 - Permutations</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Imagine you have 3 different colored balls: Red, Green, Blue. You want to arrange them in all possible orders. The permutations would be: RGB, RBG, GRB, GBR, BRG, BGR.</p>
+                <p>In programming terms: Given an array of distinct integers, return all possible permutations.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: The Backtracking Approach</h3>
+                <p>Think of it as building permutations one element at a time, and when you reach a complete permutation, you save it and backtrack to try different choices.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Step-by-Step Process</h3>
+                <ol class="explanation-list">
+                    <li>Start with an empty current permutation</li>
+                    <li>For each number not yet used in current permutation:
+                        <ul>
+                            <li>Add it to current permutation</li>
+                            <li>Recursively build the rest</li>
+                            <li>Remove it (backtrack) to try other options</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def permute(self, nums: List[int]) -> List[List[int]]:
+    def backtrack(start):
+        if start == len(nums):
+            result.append(nums[:])
+            return
+        
+        for i in range(start, len(nums)):
+            # Swap current index with start
+            nums[start], nums[i] = nums[i], nums[start]
+            
+            # Recursively generate permutations for rest
+            backtrack(start + 1)
+            
+            # Backtrack - swap back
+            nums[start], nums[i] = nums[i], nums[start]
+    
+    result = []
+    backtrack(0)
+    return result</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Alternative Approach (Using Visited Array)</h3>
+                <div class="code-block">def permute(self, nums: List[int]) -> List[List[int]]:
+    def backtrack(path):
+        if len(path) == len(nums):
+            result.append(path[:])
+            return
+        
+        for num in nums:
+            if num not in path:
+                path.append(num)
+                backtrack(path)
+                path.pop()
+    
+    result = []
+    backtrack([])
+    return result</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(n × n!) - There are n! permutations, each taking O(n) to build.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(n) for recursion stack, plus O(n × n!) for output.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 70 Content -->
+        <div id="content-70" class="problem-content">
+            <h2 class="problem-title">LC 70 - Climbing Stairs</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Imagine you're climbing a staircase. You can take either 1 step or 2 steps at a time. The question is: How many distinct ways can you reach the top?</p>
+                <p>Example: For 3 steps, you could do: 1+1+1, 1+2, or 2+1. That's 3 different ways.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: The Core Insight</h3>
+                <p>To reach step n, you must come from either step n-1 (taking 1 step) or step n-2 (taking 2 steps). So ways(n) = ways(n-1) + ways(n-2).</p>
+                <p>This is the Fibonacci sequence! Base cases: ways(1) = 1, ways(2) = 2.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Human Thinking Process</h3>
+                <p>Start from the bottom: 
+                <ul class="explanation-list">
+                    <li>1 step: only 1 way (1)</li>
+                    <li>2 steps: 2 ways (1+1, 2)</li>
+                    <li>3 steps: ways(2) + ways(1) = 2 + 1 = 3</li>
+                    <li>4 steps: ways(3) + ways(2) = 3 + 2 = 5</li>
+                </ul>
+                </p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Efficient Solution</h3>
+                <p>We don't need to calculate all previous values each time. We can store just the last two results and build up.</p>
+                <div class="code-block">def climbStairs(self, n: int) -> int:
+    if n <= 2:
+        return n
+    
+    # Start with base cases
+    prev1, prev2 = 2, 1  # for n=2 and n=1
+    
+    for i in range(3, n + 1):
+        current = prev1 + prev2
+        prev2, prev1 = prev1, current
+    
+    return prev1</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(n) - We calculate each step value once.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(1) - We only store two previous values.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Interview Explanation</h3>
+                <p>"It's like Fibonacci sequence. To get to step n, you can come from step n-1 or n-2. So we compute bottom-up storing only last two values."</p>
+            </div>
+        </div>
+        
+        <!-- Problem 322 Content -->
+        <div id="content-322" class="problem-content">
+            <h2 class="problem-title">LC 322 - Coin Change</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>You're at a store and need to make exact change for an amount. You have coins of different denominations (like 1¢, 5¢, 10¢, 25¢). What's the fewest number of coins you can use?</p>
+                <p>Example: Amount = 11¢, coins = [1, 2, 5]. Best solution: 5 + 5 + 1 = 3 coins.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: Dynamic Programming Approach</h3>
+                <p>We create an array dp where dp[i] = minimum coins needed to make amount i. We initialize dp[0] = 0 (0 coins for 0 amount), and others as infinity.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Step-by-Step Process</h3>
+                <ol class="explanation-list">
+                    <li>For each amount from 1 to target amount</li>
+                    <li>For each coin denomination</li>
+                    <li>If coin ≤ current amount, try using it: dp[amount] = min(dp[amount], 1 + dp[amount - coin])</li>
+                </ol>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def coinChange(self, coins: List[int], amount: int) -> int:
+    # Initialize DP array with infinity
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0  # 0 coins needed for 0 amount
+    
+    # For each amount from 1 to target
+    for i in range(1, amount + 1):
+        # Try each coin
+        for coin in coins:
+            if coin <= i:
+                dp[i] = min(dp[i], 1 + dp[i - coin])
+    
+    return dp[amount] if dp[amount] != float('inf') else -1</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Example Walkthrough</h3>
+                <p>coins = [1, 2, 5], amount = 11</p>
+                <ul class="explanation-list">
+                    <li>dp[0] = 0</li>
+                    <li>dp[1] = 1 (1 coin)</li>
+                    <li>dp[2] = 1 (2 coin) or min(1 + dp[1]) = 1</li>
+                    <li>dp[5] = 1 (5 coin)</li>
+                    <li>dp[11] = min(1+dp[10], 1+dp[9], 1+dp[6]) = 3</li>
+                </ul>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(amount × number of coins) - For each amount, we check each coin.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(amount) - We store DP array of size amount+1.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 198 Content -->
+        <div id="content-198" class="problem-content">
+            <h2 class="problem-title">LC 198 - House Robber</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>You're a robber planning to rob houses along a street. Each house has money, but you can't rob adjacent houses (alarm will trigger). What's the maximum money you can steal?</p>
+                <p>Example: [2, 7, 9, 3, 1]. Best: Rob house 1 (2) and house 3 (9) and house 5 (1) = 12.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: Dynamic Programming Thinking</h3>
+                <p>At each house, you have two choices:
+                <ul>
+                    <li>Rob this house: money = current house money + money from two houses before</li>
+                    <li>Skip this house: money = money from previous house</li>
+                </ul>
+                So rob[i] = max(rob[i-1], nums[i] + rob[i-2])</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Step-by-Step Process</h3>
+                <ol class="explanation-list">
+                    <li>If no houses: return 0</li>
+                    <li>If one house: return that house's money</li>
+                    <li>Initialize two variables: prev2, prev1 representing i-2 and i-1</li>
+                    <li>For each house from 2nd onward: current = max(prev1, nums[i] + prev2)</li>
+                </ol>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def rob(self, nums: List[int]) -> int:
+    if not nums:
+        return 0
+    if len(nums) == 1:
+        return nums[0]
+    
+    # Initialize first two houses
+    prev2 = nums[0]  # max up to house 0
+    prev1 = max(nums[0], nums[1])  # max up to house 1
+    
+    # Process remaining houses
+    for i in range(2, len(nums)):
+        current = max(prev1, nums[i] + prev2)
+        prev2, prev1 = prev1, current
+    
+    return prev1</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Example Walkthrough</h3>
+                <p>nums = [2, 7, 9, 3, 1]</p>
+                <ul class="explanation-list">
+                    <li>House 0: max = 2</li>
+                    <li>House 1: max(2, 7) = 7</li>
+                    <li>House 2: max(7, 9+2) = 11</li>
+                    <li>House 3: max(11, 3+7) = 11</li>
+                    <li>House 4: max(11, 1+11) = 12</li>
+                </ul>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(n) - We process each house once.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(1) - We only store two previous values.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 704 Content -->
+        <div id="content-704" class="problem-content">
+            <h2 class="problem-title">LC 704 - Binary Search</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Imagine looking up a word in a dictionary. You don't start from page 1. You open to the middle, see if your word comes before or after, and eliminate half the dictionary. Repeat until found.</p>
+                <p>That's binary search - the most efficient way to find something in a sorted collection.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: The Core Algorithm</h3>
+                <p>1. Start with left = 0, right = n-1<br>
+                   2. While left ≤ right:<br>
+                   &nbsp;&nbsp;a. Calculate mid = (left + right) // 2<br>
+                   &nbsp;&nbsp;b. If target == nums[mid]: return mid<br>
+                   &nbsp;&nbsp;c. If target < nums[mid]: search left half (right = mid - 1)<br>
+                   &nbsp;&nbsp;d. If target > nums[mid]: search right half (left = mid + 1)</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Why It's So Efficient</h3>
+                <p>Each comparison eliminates HALF of the remaining elements. For 1 million items, you need at most 20 comparisons (log₂1,000,000 ≈ 20).</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def search(self, nums: List[int], target: int) -> int:
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        
+        if nums[mid] == target:
+            return mid
+        elif target < nums[mid]:
+            right = mid - 1
+        else:
+            left = mid + 1
+    
+    return -1  # Not found</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Common Pitfalls</h3>
+                <ul class="explanation-list">
+                    <li><strong>Off-by-one errors:</strong> Use ≤ not < in while condition</li>
+                    <li><strong>Integer overflow:</strong> In some languages, use left + (right - left) // 2</li>
+                    <li><strong>Not sorted:</strong> Binary search only works on sorted arrays!</li>
+                </ul>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(log n) - Each step halves the search space.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(1) - Only uses a few variables.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 33 Content -->
+        <div id="content-33" class="problem-content">
+            <h2 class="problem-title">LC 33 - Search in Rotated Sorted Array</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Imagine a sorted list of numbers [1, 2, 3, 4, 5, 6, 7] that got rotated to [4, 5, 6, 7, 1, 2, 3]. It's like a broken clock - still sorted in two parts, but rotated.</p>
+                <p>We need to search in this rotated sorted array without first "un-rotating" it.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: Key Insight</h3>
+                <p>Even though rotated, at least one half of the array (either left or right of mid) will be properly sorted. We can check which half is sorted and adjust search accordingly.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Modified Binary Search</h3>
+                <ol class="explanation-list">
+                    <li>Find mid</li>
+                    <li>Check if left half is sorted (nums[left] ≤ nums[mid])</li>
+                    <li>If left half sorted:
+                        <ul>
+                            <li>If target in left half range: search left</li>
+                            <li>Else: search right</li>
+                        </ul>
+                    </li>
+                    <li>Else (right half sorted):
+                        <ul>
+                            <li>If target in right half range: search right</li>
+                            <li>Else: search left</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def search(self, nums: List[int], target: int) -> int:
+    left, right = 0, len(nums) - 1
+    
+    while left <= right:
+        mid = (left + right) // 2
+        
+        if nums[mid] == target:
+            return mid
+        
+        # Check which half is sorted
+        if nums[left] <= nums[mid]:  # Left half is sorted
+            if nums[left] <= target < nums[mid]:
+                right = mid - 1  # Target in left half
+            else:
+                left = mid + 1   # Target in right half
+        else:  # Right half is sorted
+            if nums[mid] < target <= nums[right]:
+                left = mid + 1   # Target in right half
+            else:
+                right = mid - 1  # Target in left half
+    
+    return -1</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Example Walkthrough</h3>
+                <p>nums = [4, 5, 6, 7, 0, 1, 2], target = 0</p>
+                <ul class="explanation-list">
+                    <li>left=0, right=6, mid=3 (value 7)</li>
+                    <li>Left half [4,5,6,7] sorted, target 0 not in range</li>
+                    <li>Search right half [0,1,2]</li>
+                    <li>Continue binary search in right half</li>
+                </ul>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(log n) - Still binary search, just with extra condition checks.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(1) - Only constant extra space.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 3 Content -->
+        <div id="content-3" class="problem-content">
+            <h2 class="problem-title">LC 3 - Longest Substring Without Repeating Characters</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Imagine you're reading a book and want to find the longest continuous passage where no word repeats. You slide a bookmark along, keeping track of words you've seen.</p>
+                <p>Example: "abcabcbb" → longest substring without repeats is "abc" (length 3).</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: Sliding Window Approach</h3>
+                <p>We maintain a window [left, right] that contains no repeating characters. As we expand right, if we find a repeat, we shrink left until no repeats.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Using a Set/HashMap</h3>
+                <p>We use a set to track characters in current window. When we see a character already in set, we move left pointer forward, removing characters from set until duplicate is gone.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def lengthOfLongestSubstring(self, s: str) -> int:
+    char_set = set()
+    left = 0
+    max_length = 0
+    
+    for right in range(len(s)):
+        # If duplicate found, shrink window from left
+        while s[right] in char_set:
+            char_set.remove(s[left])
+            left += 1
+        
+        # Add current character to set
+        char_set.add(s[right])
+        
+        # Update max length
+        max_length = max(max_length, right - left + 1)
+    
+    return max_length</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Optimized Version with HashMap</h3>
+                <div class="code-block">def lengthOfLongestSubstring(self, s: str) -> int:
+    char_index = {}  # Store last index of each character
+    left = 0
+    max_length = 0
+    
+    for right in range(len(s)):
+        if s[right] in char_index:
+            # Jump left to max of current left or last occurrence + 1
+            left = max(left, char_index[s[right]] + 1)
+        
+        # Update character's last index
+        char_index[s[right]] = right
+        
+        # Update max length
+        max_length = max(max_length, right - left + 1)
+    
+    return max_length</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(n) - Each character visited at most twice (by left and right pointers).</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(min(n, charset size)) - Set stores unique characters in window.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 125 Content -->
+        <div id="content-125" class="problem-content">
+            <h2 class="problem-title">LC 125 - Valid Palindrome</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>A palindrome reads the same forwards and backwards, ignoring spaces, punctuation, and case. Like "A man, a plan, a canal: Panama" or "race a car".</p>
+                <p>It's like checking if a word or phrase is symmetrical.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: Two-Pointer Approach</h3>
+                <p>Use two pointers: one at start, one at end. Move them toward each other, skipping non-alphanumeric characters, comparing characters (case-insensitive).</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Simple Algorithm</h3>
+                <ol class="explanation-list">
+                    <li>Initialize left = 0, right = len(s) - 1</li>
+                    <li>While left < right:
+                        <ul>
+                            <li>Skip non-alphanumeric characters from left</li>
+                            <li>Skip non-alphanumeric characters from right</li>
+                            <li>Compare s[left] and s[right] (case-insensitive)</li>
+                            <li>If not equal: return False</li>
+                            <li>Move pointers inward</li>
+                        </ul>
+                    </li>
+                    <li>Return True if all comparisons pass</li>
+                </ol>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def isPalindrome(self, s: str) -> bool:
+    left, right = 0, len(s) - 1
+    
+    while left < right:
+        # Skip non-alphanumeric from left
+        while left < right and not s[left].isalnum():
+            left += 1
+        
+        # Skip non-alphanumeric from right
+        while left < right and not s[right].isalnum():
+            right -= 1
+        
+        # Compare (case-insensitive)
+        if s[left].lower() != s[right].lower():
+            return False
+        
+        # Move pointers
+        left += 1
+        right -= 1
+    
+    return True</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Alternative One-Liner</h3>
+                <div class="code-block">def isPalindrome(self, s: str) -> bool:
+    # Filter to alphanumeric, convert to lowercase
+    filtered = ''.join(ch.lower() for ch in s if ch.isalnum())
+    # Check if equals its reverse
+    return filtered == filtered[::-1]</div>
+                <p>Note: This is cleaner but creates new strings (extra memory).</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(n) - We process each character at most once.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(1) for two-pointer, O(n) for filtering approach.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 94 Content -->
+        <div id="content-94" class="problem-content">
+            <h2 class="problem-title">LC 94 - Binary Tree Inorder Traversal</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Inorder traversal of a binary tree means visiting nodes in this order: Left child → Current node → Right child. It's like reading a family tree starting from youngest on left to oldest on right.</p>
+                <p>For a BST, inorder gives nodes in sorted order.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: Recursive Approach (Simplest)</h3>
+                <p>1. Traverse left subtree<br>
+                   2. Visit current node<br>
+                   3. Traverse right subtree</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Iterative Approach (Using Stack)</h3>
+                <p>More complex but avoids recursion limits. Use stack to simulate recursion:
+                <ol>
+                    <li>Start with current = root</li>
+                    <li>While stack not empty or current not None:</li>
+                    <li>Go left as far as possible, pushing nodes to stack</li>
+                    <li>Pop from stack (visit node)</li>
+                    <li>Go to right child</li>
+                </ol>
+                </p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: Recursive Solution Code</h3>
+                <div class="code-block">def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+    result = []
+    
+    def inorder(node):
+        if not node:
+            return
+        
+        inorder(node.left)      # Traverse left
+        result.append(node.val) # Visit current
+        inorder(node.right)     # Traverse right
+    
+    inorder(root)
+    return result</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Iterative Solution Code</h3>
+                <div class="code-block">def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+    result = []
+    stack = []
+    current = root
+    
+    while stack or current:
+        # Go left as far as possible
+        while current:
+            stack.append(current)
+            current = current.left
+        
+        # Visit node
+        current = stack.pop()
+        result.append(current.val)
+        
+        # Go right
+        current = current.right
+    
+    return result</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(n) - Visit each node exactly once.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(n) worst case (skewed tree), O(log n) average (balanced tree).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 102 Content -->
+        <div id="content-102" class="problem-content">
+            <h2 class="problem-title">LC 102 - Binary Tree Level Order Traversal</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Imagine printing an organization chart level by level. First the CEO, then all VPs, then all directors, etc. Each level gets its own line in the output.</p>
+                <p>This is BFS (Breadth-First Search) on a tree.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: Queue-Based BFS</h3>
+                <p>We use a queue to process nodes level by level:
+                <ol>
+                    <li>Start with root in queue</li>
+                    <li>While queue not empty:</li>
+                    <li>Process all nodes at current level (size of queue at start of level)</li>
+                    <li>Add their children to queue for next level</li>
+                </ol>
+                </p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: The Algorithm</h3>
+                <p>1. Initialize queue with root<br>
+                   2. While queue not empty:<br>
+                   &nbsp;&nbsp;a. Get current level size<br>
+                   &nbsp;&nbsp;b. Create list for current level<br>
+                   &nbsp;&nbsp;c. For i in range(level_size):<br>
+                   &nbsp;&nbsp;&nbsp;&nbsp;i. Pop node from queue<br>
+                   &nbsp;&nbsp;&nbsp;&nbsp;ii. Add value to current level list<br>
+                   &nbsp;&nbsp;&nbsp;&nbsp;iii. Add children to queue if they exist<br>
+                   &nbsp;&nbsp;d. Add current level list to result</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+    if not root:
+        return []
+    
+    result = []
+    queue = deque([root])
+    
+    while queue:
+        level_size = len(queue)
+        current_level = []
+        
+        for _ in range(level_size):
+            node = queue.popleft()
+            current_level.append(node.val)
+            
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+        
+        result.append(current_level)
+    
+    return result</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Why Use Deque</h3>
+                <p>Python's deque (double-ended queue) has O(1) popleft() operation, while list has O(n) pop(0). For BFS with many nodes, deque is much faster.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(n) - Visit each node exactly once.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(n) worst case - queue can hold up to n/2 nodes at last level.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 200 Content -->
+        <div id="content-200" class="problem-content">
+            <h2 class="problem-title">LC 200 - Number of Islands</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Imagine a map where '1' is land and '0' is water. Islands are connected lands (up, down, left, right). Counting islands is like flying over and marking each connected land mass.</p>
+                <p>This is a classic graph traversal problem (DFS/BFS on grid).</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: DFS Approach</h3>
+                <p>When we find land ('1'), we perform DFS to mark all connected land as visited (change to '0' or mark visited), then count that as one island.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: The Algorithm</h3>
+                <ol class="explanation-list">
+                    <li>Initialize island_count = 0</li>
+                    <li>For each cell in grid:</li>
+                    <li>If cell is '1' (land):</li>
+                    <li>&nbsp;&nbsp;Increment island_count</li>
+                    <li>&nbsp;&nbsp;DFS/BFS to mark all connected '1's as visited</li>
+                    <li>Return island_count</li>
+                </ol>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code (DFS)</h3>
+                <div class="code-block">def numIslands(self, grid: List[List[str]]) -> int:
+    if not grid:
+        return 0
+    
+    rows, cols = len(grid), len(grid[0])
+    island_count = 0
+    
+    def dfs(r, c):
+        # Base cases: out of bounds or water
+        if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == '0':
+            return
+        
+        # Mark as visited by setting to '0'
+        grid[r][c] = '0'
+        
+        # Visit all 4 directions
+        dfs(r + 1, c)  # down
+        dfs(r - 1, c)  # up
+        dfs(r, c + 1)  # right
+        dfs(r, c - 1)  # left
+    
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] == '1':
+                island_count += 1
+                dfs(r, c)
+    
+    return island_count</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: BFS Alternative</h3>
+                <p>Instead of recursion, use queue for BFS. Better for large grids to avoid recursion depth limits.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(m × n) - We visit each cell at most once.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(min(m, n)) for DFS recursion stack in worst case, O(m × n) for BFS queue in worst case.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 733 Content -->
+        <div id="content-733" class="problem-content">
+            <h2 class="problem-title">LC 733 - Flood Fill</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Like the "paint bucket" tool in image editors. You click on a pixel, and it fills all connected pixels of the same color with a new color.</p>
+                <p>Example: In a drawing, click on white area → all connected white becomes blue.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: DFS/BFS Approach</h3>
+                <p>Similar to Number of Islands. Start from given pixel, check if it's the target color. If yes, change to new color and recursively/iteratively fill connected pixels (up, down, left, right).</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Important Edge Cases</h3>
+                <ul class="explanation-list">
+                    <li>If new color == old color: return image unchanged (avoid infinite recursion)</li>
+                    <li>Boundary checks: don't go outside image</li>
+                    <li>Only fill pixels with same color as starting pixel</li>
+                </ul>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code (DFS)</h3>
+                <div class="code-block">def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:
+    rows, cols = len(image), len(image[0])
+    old_color = image[sr][sc]
+    
+    # If new color is same as old, no change needed
+    if old_color == newColor:
+        return image
+    
+    def dfs(r, c):
+        # Base cases
+        if r < 0 or r >= rows or c < 0 or c >= cols:
+            return
+        if image[r][c] != old_color:
+            return
+        
+        # Change color
+        image[r][c] = newColor
+        
+        # Recursively fill neighbors
+        dfs(r + 1, c)  # down
+        dfs(r - 1, c)  # up
+        dfs(r, c + 1)  # right
+        dfs(r, c - 1)  # left
+    
+    dfs(sr, sc)
+    return image</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: BFS Version</h3>
+                <div class="code-block">def floodFill(self, image: List[List[int]], sr: int, sc: int, newColor: int) -> List[List[int]]:
+    if image[sr][sc] == newColor:
+        return image
+    
+    rows, cols = len(image), len(image[0])
+    old_color = image[sr][sc]
+    queue = deque([(sr, sc)])
+    
+    while queue:
+        r, c = queue.popleft()
+        image[r][c] = newColor
+        
+        # Check and add neighbors
+        for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+            nr, nc = r + dr, c + dc
+            if 0 <= nr < rows and 0 <= nc < cols and image[nr][nc] == old_color:
+                queue.append((nr, nc))
+    
+    return image</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(m × n) - In worst case, fill entire image.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(m × n) for recursion stack in worst case.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 20 Content -->
+        <div id="content-20" class="problem-content">
+            <h2 class="problem-title">LC 20 - Valid Parentheses</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Think of matching parentheses like matching pairs of shoes. For every left shoe (opening bracket), you need a matching right shoe (closing bracket) of the same type, and they must be in the correct order.</p>
+                <p>Valid: ([]) - like properly nested containers. Invalid: ([)] - like mismatched containers.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: The Stack Concept</h3>
+                <p>A stack is like a stack of plates. You can only add or remove from the top. This is perfect for tracking opening brackets - the last one opened needs to be the first one closed (LIFO - Last In First Out).</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Step-by-Step Process</h3>
+                <ol class="explanation-list">
+                    <li>When you see an opening bracket ( (, [, { ), push it onto the stack.</li>
+                    <li>When you see a closing bracket, check if it matches the top of the stack.</li>
+                    <li>If it matches, pop from the stack. If not, it's invalid.</li>
+                    <li>At the end, the stack should be empty (all brackets matched).</li>
+                </ol>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def isValid(self, s: str) -> bool:
+    # Map closing brackets to their corresponding opening brackets
+    bracket_map = {')': '(', ']': '[', '}': '{'}
+    stack = []
+    
+    for char in s:
+        if char in bracket_map.values():
+            # It's an opening bracket
+            stack.append(char)
+        elif char in bracket_map:
+            # It's a closing bracket
+            if not stack or stack[-1] != bracket_map[char]:
+                return False
+            stack.pop()
+    
+    # Valid if stack is empty (all brackets matched)
+    return len(stack) == 0</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Common Mistakes to Avoid</h3>
+                <ul class="explanation-list">
+                    <li><strong>Forgetting to check if stack is empty</strong> before popping</li>
+                    <li><strong>Not handling the case</strong> where there are extra closing brackets</li>
+                    <li><strong>Not handling the case</strong> where there are extra opening brackets</li>
+                    <li><strong>Wrong bracket mapping</strong> - ensure correct pairs</li>
+                </ul>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(n) - We process each character once.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(n) - In worst case, all characters are opening brackets.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Problem 739 Content -->
+        <div id="content-739" class="problem-content">
+            <h2 class="problem-title">LC 739 - Daily Temperatures</h2>
+            
+            <div class="part">
+                <h3>PART 1: Real-Life Analogy</h3>
+                <p>Given daily temperatures, for each day you want to know: how many days until a warmer temperature? Like checking weather forecast to see when it will get warmer.</p>
+                <p>Example: [73, 74, 75, 71, 69, 72, 76, 73] → output: [1, 1, 4, 2, 1, 1, 0, 0]</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 2: Monotonic Stack Approach</h3>
+                <p>We use a stack to store indices of temperatures. The stack maintains temperatures in decreasing order. When we find a warmer temperature, we pop from stack and calculate the difference in days.</p>
+            </div>
+            
+            <div class="part">
+                <h3>PART 3: Step-by-Step Process</h3>
+                <ol class="explanation-list">
+                    <li>Initialize result array with 0s</li>
+                    <li>Initialize empty stack to store indices</li>
+                    <li>For each day i:
+                        <ul>
+                            <li>While stack not empty and current temp > temp at stack top index</li>
+                            <li>Pop index j from stack</li>
+                            <li>result[j] = i - j (days until warmer)</li>
+                        </ul>
+                    </li>
+                    <li>Push current index i to stack</li>
+                </ol>
+            </div>
+            
+            <div class="part">
+                <h3>PART 4: The Solution Code</h3>
+                <div class="code-block">def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
+    n = len(temperatures)
+    result = [0] * n
+    stack = []  # stores indices
+    
+    for i in range(n):
+        # While current temp is warmer than temp at stack top
+        while stack and temperatures[i] > temperatures[stack[-1]]:
+            prev_index = stack.pop()
+            result[prev_index] = i - prev_index
+        
+        stack.append(i)
+    
+    return result</div>
+            </div>
+            
+            <div class="part">
+                <h3>PART 5: Example Walkthrough</h3>
+                <p>temperatures = [73, 74, 75, 71, 69, 72, 76, 73]</p>
+                <ul class="explanation-list">
+                    <li>Day 0 (73): stack = [0]</li>
+                    <li>Day 1 (74): 74 > 73 → pop 0, result[0] = 1, stack = [1]</li>
+                    <li>Day 2 (75): 75 > 74 → pop 1, result[1] = 1, stack = [2]</li>
+                    <li>Day 3 (71): stack = [2, 3]</li>
+                    <li>Day 4 (69): stack = [2, 3, 4]</li>
+                    <li>Day 5 (72): 72 > 69,71 → pop 4,3, result[4]=1, result[3]=2, stack=[2,5]</li>
+                </ul>
+            </div>
+            
+            <div class="part">
+                <h3>PART 6: Time & Space Complexity</h3>
+                <div class="complexity">
+                    <div class="time-complexity">
+                        <h4>Time Complexity</h4>
+                        <p>O(n) - Each index pushed and popped at most once.</p>
+                    </div>
+                    <div class="space-complexity">
+                        <h4>Space Complexity</h4>
+                        <p>O(n) - Stack can store all indices in worst case.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>LeetCode Problem Explorer | All 16 Problems Explained in Plain English</p>
+            <p>Select a problem from the dropdown to see its detailed explanation</p>
+        </footer>
+    </div>
+
+    <div class="back-to-top" id="backToTop">↑</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdown = document.getElementById('problemDropdown');
+            const allContents = document.querySelectorAll('.problem-content');
+            const backToTopBtn = document.getElementById('backToTop');
+            
+            // Function to show selected problem content
+            function showProblem(problemId) {
+                // Hide all problem contents
+                allContents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show selected problem content
+                const selectedContent = document.getElementById(`content-${problemId}`);
+                if (selectedContent) {
+                    selectedContent.classList.add('active');
+                    // Update dropdown to show selected value
+                    dropdown.value = problemId;
+                }
+            }
+            
+            // Event listener for dropdown change
+            dropdown.addEventListener('change', function() {
+                const selectedValue = this.value;
+                if (selectedValue) {
+                    showProblem(selectedValue);
+                    
+                    // Scroll to the content
+                    setTimeout(() => {
+                        document.querySelector('.problem-content.active').scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }, 100);
+                } else {
+                    // Hide all if nothing is selected
+                    allContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                }
+            });
+            
+            // Show first problem by default
+            showProblem('104');
+            
+            // Back to top button functionality
+            window.addEventListener('scroll', function() {
+                if (window.pageYOffset > 300) {
+                    backToTopBtn.style.display = 'block';
+                } else {
+                    backToTopBtn.style.display = 'none';
+                }
+            });
+            
+            backToTopBtn.addEventListener('click', function() {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // Add keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const currentValue = dropdown.value;
+                    const options = Array.from(dropdown.options);
+                    const currentIndex = options.findIndex(opt => opt.value === currentValue);
+                    
+                    let newIndex;
+                    if (e.key === 'ArrowUp') {
+                        newIndex = currentIndex > 1 ? currentIndex - 1 : options.length - 1;
+                    } else {
+                        newIndex = currentIndex < options.length - 1 ? currentIndex + 1 : 1;
+                    }
+                    
+                    if (newIndex > 0) { // Skip the first empty option
+                        dropdown.value = options[newIndex].value;
+                        dropdown.dispatchEvent(new Event('change'));
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
